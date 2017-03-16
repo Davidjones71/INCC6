@@ -624,12 +624,7 @@ namespace AnalysisDefs
 
         // suitable for spreadsheet use, convert to lines by ToString() on each row entry
         public virtual List<NCCReporter.Row> ToColumns(Measurement m) { return new List<NCCReporter.Row>(); }
-
-        public override void GenParamList()  // force implementation in subclasses
-        {
-			ps = new List<DBParamEntry>();
-        }
-   
+        //The GenParams here actually did the OPPOSITE of what you said in notes, which was to force child classes to implement. HN 3/2/2017
     }
 
     public class INCCMethodResult : ParameterBase, IINCCStringRep 

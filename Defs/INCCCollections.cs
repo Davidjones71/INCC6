@@ -4316,8 +4316,8 @@ namespace AnalysisDefs
 			}
 			return ms;
 		}
- 
-        public List<Measurement> MeasurementsFor(string DetName, AssaySelector.MeasurementOption option = AssaySelector.MeasurementOption.unspecified, string insnum = "")
+
+        public List<Measurement> MeasurementsFor(string DetName, AssaySelector.MeasurementOption option, string insnum = "")
         {
             List<Measurement> ms = new List<Measurement>();
             DataTable dt_meas;
@@ -4364,7 +4364,61 @@ namespace AnalysisDefs
             return ms;
         }
 
-		public bool DeleteMeasurement(MeasId id)
+
+        public List<Measurement> MeasurementsFor(string DetName, AssaySelector.MeasurementOption option = AssaySelector.MeasurementOption.unspecified, ItemId id = null)
+        {
+            List<Measurement> ms = new List<Measurement>();
+            DataTable dt_meas;
+            ResultsRecs recs = new ResultsRecs();
+
+            dt_meas = NC.App.Pest.GetACollection(DB.Pieces.Measurements, DetName);
+
+            foreach (DataRow dr in dt_meas.Rows)
+            {
+                AssaySelector.MeasurementOption thisopt;
+                if (!option.IsWildCard())
+                {
+                    thisopt = AssaySelectorExtensions.SrcToEnum(dr["Type"].ToString());
+                    if (thisopt != option)
+                        continue; // skip this one, better to do this at the select level because the resultrecs above are relatively big objects to process 
+                }
+
+                // create the measurement id from the measurements table, augment with item id later
+                MeasId MeaId = new MeasId(
+                    AssaySelectorExtensions.SrcToEnum(dr["Type"].ToString()),
+                    DB.Utils.DBDateTimeOffset(dr["DateTime"]),
+                    dr["FileName"].ToString(), DB.Utils.DBInt64(dr["id"])); // db table key actually
+
+                // get the traditional results rec that matches the measurement id 
+                INCCResults.results_rec rec = recs.Get(MeaId.UniqueId);
+                if (rec != null)
+                {
+                    if (id.item == rec.item.item)
+                    {
+                        Measurement m = new Measurement(rec, MeaId, NC.App.Pest.logger);
+                        MeaId.Item.Copy(rec.item);
+                        ms.Add(m);
+                        if (m.ResultsFiles != null)      // it is never null
+                        {
+                            bool LMOnly = option.IsListMode();
+                            if (!string.IsNullOrEmpty(dr["FileName"].ToString()))
+                                m.ResultsFiles.Add(LMOnly, dr["FileName"].ToString());
+                            List<string> lrfpaths = NC.App.DB.GetResultFiles(MeaId);
+                            foreach (string rfpath in lrfpaths)
+                                m.ResultsFiles.Add(LMOnly, rfpath);
+                        }
+                        IngestAnalysisMethodResultsFromDB(m);
+                    }
+                    else
+                        //Not the item we are looking for.
+                        continue;
+                }
+                // for Reanalysis, and Assay summary: cycles restored elsewhere, trad results not yet, etc 
+            }
+            return ms;
+        }
+
+        public bool DeleteMeasurement(MeasId id)
 		{
 			DB.Measurements mdb = new DB.Measurements();
 			return mdb.Delete(id.UniqueId);

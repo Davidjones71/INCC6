@@ -46,12 +46,12 @@ namespace NewUI
         {
             InitializeComponent();
             mp = new MethodParamFormFields(AnalysisMethod.CollarAmLi);
-
             RelativeDoublesRateTextBox.ToValidate = NumericTextBox.ValidateType.Float;
             RelativeDoublesRateTextBox.NumberFormat = NumericTextBox.Formatter.F3;
 
             Integ.GetCurrentAcquireDetectorPair(ref mp.acq, ref mp.det);
             this.Text += " for " + mp.det.Id.DetectorName;
+
             modified = mod;
             mp.RefreshMatTypeComboBox(MaterialTypeComboBox);
 			mp.SelectMaterialType(MaterialTypeComboBox);
@@ -196,6 +196,7 @@ namespace NewUI
         {
             //store changes?
             IDDCollarCal cal = new IDDCollarCal(col,modified);
+            cal.StartPosition = FormStartPosition.CenterScreen;
             cal.Show();
             this.Close();
         }

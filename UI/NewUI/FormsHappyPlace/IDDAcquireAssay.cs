@@ -266,11 +266,6 @@ namespace NewUI
 					if (ka.known_alpha_type == INCCAnalysisParams.KnownAlphaVariant.HeavyMetalCorrection)
 						dlgres = (new IDDHeavyMetalItemData(am, ah.ap.ItemId).ShowDialog());
 				}
-				// if Verif + collar  get collar data
-				if (am.Has(AnalysisMethod.CollarAmLi))
-				{
-					dlgres = (new IDDCollarData().ShowDialog());
-				}
 				// if Verif + curium ratio, get cm_pu_ratio w dlg; 
 				if (am.Has(AnalysisMethod.CuriumRatio))
 				{
@@ -287,26 +282,45 @@ namespace NewUI
 
 		private void OKBtn_Click(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(ItemIdComboBox.Text))
-				MessageBox.Show("You must enter an item id for this assay.", "ERROR");
-			else
-			{
+            bool isCollar = Integ.GetMethodSelections(Integ.GetCurrentAcquireParams()).Has(AnalysisMethod.CollarAmLi) ||
+                Integ.GetMethodSelections(Integ.GetCurrentAcquireParams()).Has(AnalysisMethod.CollarCf);
+            if (string.IsNullOrEmpty(ItemIdComboBox.Text))
+            {
+                MessageBox.Show("You must enter an item id for this assay.", "ERROR");
+                DialogResult = DialogResult.Abort;
+            }
+
+            else if (!isCollar)
+            {
                 // save/update item id changes only when user selects OK
                 ItemId Cur = NC.App.DB.ItemIds.Get(ah.ap.item_id);
                 Cur.IsoApply(NC.App.DB.Isotopics.Get(ah.ap.isotopics_id));           // apply the iso dates to the item
 
                 NC.App.DB.ItemIds.Set();  // writes any new or modified item ids to the DB
-				NC.App.DB.ItemIds.Refresh();    // save and update the in-memory item list 
-				bool ocntinue = GetAdditionalParameters();
-				if (ocntinue && (ah.OKButton_Click(sender, e) == DialogResult.OK))
-				{
-					Visible = false;
-					// Add strata update to measurement object.    HN 9.23.2015              
-					UIIntegration.Controller.SetAssay();  // tell the controller to do an assay operation using the current measurement state
-					UIIntegration.Controller.Perform();  // start the measurement file or DAQ thread
-					Close();
-				}
-			}
+                NC.App.DB.ItemIds.Refresh();    // save and update the in-memory item list 
+                bool ocntinue = GetAdditionalParameters();
+                if (ocntinue && (ah.OKButton_Click(sender, e) == DialogResult.OK))
+                {
+                    Visible = false;
+                    // Add strata update to measurement object.    HN 9.23.2015              
+                    UIIntegration.Controller.SetAssay();  // tell the controller to do an assay operation using the current measurement state
+                    UIIntegration.Controller.Perform();  // start the measurement file or DAQ thread
+                    Close();
+                }
+                DialogResult = DialogResult.None;
+            }
+            else
+            {
+                //Collar
+                // save/update item id changes only when user selects OK
+                ItemId Cur = NC.App.DB.ItemIds.Get(ah.ap.item_id);
+                Cur.IsoApply(NC.App.DB.Isotopics.Get(ah.ap.isotopics_id));           // apply the iso dates to the item
+
+                NC.App.DB.ItemIds.Set();  // writes any new or modified item ids to the DB
+                NC.App.DB.ItemIds.Refresh();    // save and update the in-memory item list 
+                DialogResult = DialogResult.OK;
+                Close();
+            }
 		}
 
 		private void CancelBtn_Click(object sender, EventArgs e)

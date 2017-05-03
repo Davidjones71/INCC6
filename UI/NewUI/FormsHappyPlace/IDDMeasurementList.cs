@@ -37,9 +37,11 @@ namespace NewUI
 	public partial class IDDMeasurementList : Form
 	{
 
-		public enum EndGoal { Report, Summary, Reanalysis, Transfer }
+		public enum EndGoal { Report, Summary, Reanalysis, Transfer, GetSelection }
 
-		public IDDMeasurementList(AssaySelector.MeasurementOption filter, bool alltypes, EndGoal goal, Detector detector = null)
+        bool AllowMultiSelect = true;
+        Measurement selected = null;
+		public IDDMeasurementList(AssaySelector.MeasurementOption filter, bool alltypes, EndGoal goal, Detector detector = null, ItemId id = null)
 		{
 			InitializeComponent();
 			System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
@@ -49,8 +51,13 @@ namespace NewUI
 				PrepNotepad();
 				SetTitlesAndChoices(filter, alltypes, goal,
 					detector == null ? string.Empty : detector.Id.DetectorId, string.Empty);
-				mlist = N.App.DB.MeasurementsFor(detector == null ? string.Empty : detector.Id.DetectorId, filter);
+                if (id == null)
+                    mlist = N.App.DB.MeasurementsFor(detector == null ? string.Empty : detector.Id.DetectorId, filter, "");
+                else
+                    mlist = N.App.DB.MeasurementsFor(detector == null ? string.Empty : detector.Id.DetectorId, filter, id);
 				bGood = PrepList(filter, detector);
+                AllowMultiSelect =  goal == EndGoal.GetSelection?false:true;
+                    
 			} finally
 			{
 				System.Windows.Input.Mouse.OverrideCursor = null;
@@ -70,6 +77,7 @@ namespace NewUI
 				PrepNotepad();
 				SetTitlesAndChoices(filter, alltypes, goal,
 					detector == null ? string.Empty : detector.Id.DetectorId, string.Empty);
+                listView1.MultiSelect = AllowMultiSelect;
 				mlist = N.App.DB.MeasurementsFor(ilist, LMOnly, skipMethods: false);
 				bGood = PrepList(filter, detector);
 			} finally
@@ -256,17 +264,36 @@ namespace NewUI
 			pf.ShowDialog();
 			File.Delete(path);
 		}
-
+        public Measurement GetCurrentSelection ()
+        {
+            return selected;
+        }
 		private void OKBtn_Click(object sender, EventArgs e)
 		{
-			if (Goal == EndGoal.Report && TextReport)
-				ShowReconstitutedResults();
-			else if (Goal == EndGoal.Summary)
-				WriteSummary();
-			else if (Goal == EndGoal.Reanalysis)
-				DialogResult = DialogResult.OK;
-			else if (Goal == EndGoal.Transfer)
-				DialogResult = DialogResult.OK;
+            if (Goal == EndGoal.GetSelection)
+            {
+                string MeasurementId = "";
+                foreach (ListViewItem lvi in listView1.Items)
+                {
+                    if (lvi.Selected)
+                    {
+                        MeasurementId = lvi.SubItems[3].Text;
+                        selected = mlist[lvi.Index];
+                        DialogResult = DialogResult.OK;
+                    }
+                }
+            }
+            else
+            {
+                if (Goal == EndGoal.Report && TextReport)
+                    ShowReconstitutedResults();
+                else if (Goal == EndGoal.Summary)
+                    WriteSummary();
+                else if (Goal == EndGoal.Reanalysis)
+                    DialogResult = DialogResult.OK;
+                else if (Goal == EndGoal.Transfer)
+                    DialogResult = DialogResult.OK;
+            }
 			Close();
 		}
 

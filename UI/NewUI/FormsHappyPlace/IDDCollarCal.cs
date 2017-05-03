@@ -41,7 +41,7 @@ namespace NewUI
         public IDDCollarCal(INCCAnalysisParams.collar_combined_rec c, bool mod)
         {
             InitializeComponent();
-            //Figure out Cf here. HN 1/26/17
+            //TODO: Figure out Cf here. HN 5/1/2017
             mp = new MethodParamFormFields(AnalysisMethod.CollarAmLi);
             modified = mod;
             Integ.GetCurrentAcquireDetectorPair(ref mp.acq, ref mp.det);
@@ -176,6 +176,7 @@ namespace NewUI
         {
             StoreChanges();
             IDDCorrectionFactors CorrFact = new IDDCorrectionFactors(col,modified);
+            CorrFact.StartPosition = FormStartPosition.CenterScreen;
             CorrFact.Show();
             this.Close();
         }
@@ -202,6 +203,7 @@ namespace NewUI
         {
             StoreChanges();
             IDDCollarCrossRef CrossRef = new IDDCollarCrossRef(col,modified);
+            CrossRef.StartPosition = FormStartPosition.CenterScreen;
             CrossRef.Show();
             this.Close();
         }

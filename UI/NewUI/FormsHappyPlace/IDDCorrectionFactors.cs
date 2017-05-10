@@ -45,14 +45,15 @@ namespace NewUI
         public IDDCorrectionFactors(INCCAnalysisParams.collar_combined_rec c, bool mod)
         {
             InitializeComponent();
-            mp = new MethodParamFormFields(AnalysisMethod.CollarAmLi);
+            mp = new MethodParamFormFields(AnalysisMethod.Collar);
             modified = mod;
             Integ.GetCurrentAcquireDetectorPair(ref mp.acq, ref mp.det);
             this.Text += " for " + mp.det.Id.DetectorName;
             
             col = c;
             MaterialLabel.Text = mp.acq.item_type;
-            ModeLabel.Text = col.collar.collar_mode ? "Fast(Cd)" : "Thermal (no Cd)";
+
+            ModeLabel.Text = col.GetCollarModeString();
             DetectorLabel.Text = mp.det.Id.DetectorName;
 
             ATextBox.NumberFormat = NumericTextBox.Formatter.E6;

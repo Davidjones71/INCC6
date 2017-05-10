@@ -37,16 +37,18 @@ namespace NewUI
         NormParameters norm = new NormParameters();
         AcquireParameters ap = new AcquireParameters();
         Measurement passive = null;
-
+        Measurement active = null;
+        INCCAnalysisParams.collar_combined_rec col;
         public IDDCollarAcquire(NormParameters npp)
         {
             InitializeComponent();
             ap = Integ.GetCurrentAcquireParams();
-            INCCAnalysisParams.collar_combined_rec col = new INCCAnalysisParams.collar_combined_rec();
-            
+            col = new INCCAnalysisParams.collar_combined_rec();
+
             Detector d= new Detector();
             Integ.GetCurrentAcquireDetectorPair(ref ap, ref d);
             npp.CopyTo(norm);
+            Integ.BuildMeasurement(ap, d, AssaySelector.MeasurementOption.verification);
             // Main window checks if Collar is defined for material type. No check needed here.
             FillForm();
         }
@@ -54,19 +56,17 @@ namespace NewUI
         private void FillForm()
         {
             AnalysisMethods am = Integ.GetMethodSelections(ap);
-            INCCAnalysisParams.collar_combined_rec col = new INCCAnalysisParams.collar_combined_rec();
+            col = new INCCAnalysisParams.collar_combined_rec();
             if (am != null)
             {
                 // Grab the settings.
-                if (am.HasMethod(AnalysisMethod.CollarAmLi))
-                    col = (INCCAnalysisParams.collar_combined_rec)am.GetMethodParameters(AnalysisMethod.CollarAmLi);
-                else
-                    col = (INCCAnalysisParams.collar_combined_rec)am.GetMethodParameters(AnalysisMethod.CollarCf);
+                if (am.HasMethod(AnalysisMethod.Collar))
+                    col = (INCCAnalysisParams.collar_combined_rec)am.GetMethodParameters(AnalysisMethod.Collar);
             }
 
             // Default is to request passive measurement info. Once that is entered or pulled from a measurement, we 
             // can enable the active, then the calculation. HN 5/3/2017
-            ModeComboBox.SelectedIndex = col.collar.collar_mode == true ? 1 : 0;
+            ModeComboBox.SelectedIndex = col.collar.collar_mode;
             PassiveMeasurementRadioButton.Checked = true;
             PassiveMeasurementRadioButton.Enabled = false;
             ActiveMeasurementRadioButton.Checked = false;
@@ -96,7 +96,34 @@ namespace NewUI
 
         private void OKBtn_Click(object sender, EventArgs e)
         {
+            //If they didn't load a passive measurement from the DB, so measure it.
+            if (passive == null)
+            {
+                ItemId Cur = NC.App.DB.ItemIds.Get(ap.item_id);
+                Cur.IsoApply(NC.App.DB.Isotopics.Get(ap.isotopics_id));           // apply the iso dates to the item
 
+                NC.App.DB.ItemIds.Set();  // writes any new or modified item ids to the DB
+                NC.App.DB.ItemIds.Refresh();    // save and update the in-memory item list 
+
+                if (DialogResult == DialogResult.OK)
+                {
+                    Visible = false;
+                    // Add strata update to measurement object.    HN 9.23.2015              
+                    UIIntegration.Controller.SetAssay();  // tell the controller to do an assay operation using the current measurement state
+                    UIIntegration.Controller.Perform();  // start the measurement file or DAQ thread
+                }
+                DialogResult = DialogResult.None;
+            }
+            else // We've got the passive data, go ahead and get the active cycles
+            {
+                if (DialogResult == DialogResult.OK)
+                {
+                    Visible = false;
+                    // Add strata update to measurement object.    HN 9.23.2015              
+                    UIIntegration.Controller.SetAssay();  // tell the controller to do an assay operation using the current measurement state
+                    UIIntegration.Controller.Perform();  // start the measurement file or DAQ thread
+                }
+            }
         }
 
         private void CancelBtn_Click(object sender, EventArgs e)
@@ -123,15 +150,21 @@ namespace NewUI
 
             if (passive != null)
             {
-                passive.CalcAvgAndSums();
-                MultiplicityCountingRes mcr = (MultiplicityCountingRes)passive.CountingAnalysisResults[Integ.GetCurrentAcquireDetector().MultiplicityParams];
+                TransferCounts(passive);
+                passive.Persist();
 
-                PassiveSinglesTextBox.Value = mcr.DeadtimeCorrectedSinglesRate.v;
-                PassiveSinglesErrorTextBox.Value = mcr.DeadtimeCorrectedSinglesRate.err;
-                PassiveDoublesTextBox.Value = mcr.DeadtimeCorrectedDoublesRate.v;
-                PassiveDoublesErrorTextBox.Value = mcr.DeadtimeCorrectedDoublesRate.err;
-                
             }
+
+        }
+        private void TransferCounts (Measurement m)
+        {
+            m.CalcAvgAndSums();
+            MultiplicityCountingRes mcr = (MultiplicityCountingRes)m.CountingAnalysisResults[Integ.GetCurrentAcquireDetector().MultiplicityParams];
+
+            PassiveSinglesTextBox.Value = mcr.DeadtimeCorrectedSinglesRate.v;
+            PassiveSinglesErrorTextBox.Value = mcr.DeadtimeCorrectedSinglesRate.err;
+            PassiveDoublesTextBox.Value = mcr.DeadtimeCorrectedDoublesRate.v;
+            PassiveDoublesErrorTextBox.Value = mcr.DeadtimeCorrectedDoublesRate.err;
 
         }
     }

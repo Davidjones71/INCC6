@@ -42,19 +42,19 @@
             this.PassiveSinglesErrorLabel = new System.Windows.Forms.Label();
             this.PassiveDoublesLabel = new System.Windows.Forms.Label();
             this.PassiveSinglesLabel = new System.Windows.Forms.Label();
-            this.PassiveDoublesErrorTextBox = new NumericTextBox();
-            this.PassiveSinglesErrorTextBox = new NumericTextBox();
-            this.PassiveDoublesTextBox = new NumericTextBox();
-            this.PassiveSinglesTextBox = new NumericTextBox();
+            this.PassiveDoublesErrorTextBox = new NewUI.NumericTextBox();
+            this.PassiveSinglesErrorTextBox = new NewUI.NumericTextBox();
+            this.PassiveDoublesTextBox = new NewUI.NumericTextBox();
+            this.PassiveSinglesTextBox = new NewUI.NumericTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.ActiveDoublesErrorLabel = new System.Windows.Forms.Label();
             this.ActiveSinglesErrorLabel = new System.Windows.Forms.Label();
             this.ActiveDoublesLabel = new System.Windows.Forms.Label();
             this.ActiveSinglesLabel = new System.Windows.Forms.Label();
-            this.ActiveDoublesTextBox = new NumericTextBox();
-            this.ActiveDoublesErrorTextBox = new NumericTextBox();
-            this.ActiveSinglesErrorTextBox = new NumericTextBox();
-            this.ActiveSinglesTextBox = new NumericTextBox();
+            this.ActiveDoublesTextBox = new NewUI.NumericTextBox();
+            this.ActiveDoublesErrorTextBox = new NewUI.NumericTextBox();
+            this.ActiveSinglesErrorTextBox = new NewUI.NumericTextBox();
+            this.ActiveSinglesTextBox = new NewUI.NumericTextBox();
             this.ModeLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -212,34 +212,78 @@
             // PassiveDoublesErrorTextBox
             // 
             this.PassiveDoublesErrorTextBox.Location = new System.Drawing.Point(362, 50);
+            this.PassiveDoublesErrorTextBox.Max = 1.7976931348623157E+308D;
+            this.PassiveDoublesErrorTextBox.Min = 0D;
             this.PassiveDoublesErrorTextBox.Name = "PassiveDoublesErrorTextBox";
+            this.PassiveDoublesErrorTextBox.NumberFormat = NewUI.NumericTextBox.Formatter.E6;
+            this.PassiveDoublesErrorTextBox.NumStyles = ((System.Globalization.NumberStyles)(((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowTrailingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
             this.PassiveDoublesErrorTextBox.Size = new System.Drawing.Size(100, 20);
+            this.PassiveDoublesErrorTextBox.Steps = -1D;
             this.PassiveDoublesErrorTextBox.TabIndex = 3;
-
+            this.PassiveDoublesErrorTextBox.ToValidate = NewUI.NumericTextBox.ValidateType.Double;
+            this.PassiveDoublesErrorTextBox.Value = 0D;
             // 
             // PassiveSinglesErrorTextBox
             // 
             this.PassiveSinglesErrorTextBox.Location = new System.Drawing.Point(362, 24);
+            this.PassiveSinglesErrorTextBox.Max = 1.7976931348623157E+308D;
+            this.PassiveSinglesErrorTextBox.Min = 0D;
             this.PassiveSinglesErrorTextBox.Name = "PassiveSinglesErrorTextBox";
+            this.PassiveSinglesErrorTextBox.NumberFormat = NewUI.NumericTextBox.Formatter.E6;
+            this.PassiveSinglesErrorTextBox.NumStyles = ((System.Globalization.NumberStyles)(((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowTrailingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
             this.PassiveSinglesErrorTextBox.Size = new System.Drawing.Size(100, 20);
+            this.PassiveSinglesErrorTextBox.Steps = -1D;
             this.PassiveSinglesErrorTextBox.TabIndex = 2;
-
+            this.PassiveSinglesErrorTextBox.ToValidate = NewUI.NumericTextBox.ValidateType.Double;
+            this.PassiveSinglesErrorTextBox.Value = 0D;
             // 
             // PassiveDoublesTextBox
             // 
             this.PassiveDoublesTextBox.Location = new System.Drawing.Point(125, 50);
+            this.PassiveDoublesTextBox.Max = 1.7976931348623157E+308D;
+            this.PassiveDoublesTextBox.Min = 0D;
             this.PassiveDoublesTextBox.Name = "PassiveDoublesTextBox";
+            this.PassiveDoublesTextBox.NumberFormat = NewUI.NumericTextBox.Formatter.E6;
+            this.PassiveDoublesTextBox.NumStyles = ((System.Globalization.NumberStyles)(((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowTrailingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
             this.PassiveDoublesTextBox.Size = new System.Drawing.Size(100, 20);
+            this.PassiveDoublesTextBox.Steps = -1D;
             this.PassiveDoublesTextBox.TabIndex = 1;
-
+            this.PassiveDoublesTextBox.ToValidate = NewUI.NumericTextBox.ValidateType.Double;
+            this.PassiveDoublesTextBox.Value = 0D;
             // 
             // PassiveSinglesTextBox
             // 
             this.PassiveSinglesTextBox.Location = new System.Drawing.Point(125, 24);
+            this.PassiveSinglesTextBox.Max = 1.7976931348623157E+308D;
+            this.PassiveSinglesTextBox.Min = 0D;
             this.PassiveSinglesTextBox.Name = "PassiveSinglesTextBox";
+            this.PassiveSinglesTextBox.NumberFormat = NewUI.NumericTextBox.Formatter.E6;
+            this.PassiveSinglesTextBox.NumStyles = ((System.Globalization.NumberStyles)(((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowTrailingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
             this.PassiveSinglesTextBox.Size = new System.Drawing.Size(100, 20);
+            this.PassiveSinglesTextBox.Steps = -1D;
             this.PassiveSinglesTextBox.TabIndex = 0;
-
+            this.PassiveSinglesTextBox.ToValidate = NewUI.NumericTextBox.ValidateType.Double;
+            this.PassiveSinglesTextBox.Value = 0D;
             // 
             // groupBox3
             // 
@@ -296,33 +340,78 @@
             // ActiveDoublesTextBox
             // 
             this.ActiveDoublesTextBox.Location = new System.Drawing.Point(125, 49);
+            this.ActiveDoublesTextBox.Max = 1.7976931348623157E+308D;
+            this.ActiveDoublesTextBox.Min = 0D;
             this.ActiveDoublesTextBox.Name = "ActiveDoublesTextBox";
+            this.ActiveDoublesTextBox.NumberFormat = NewUI.NumericTextBox.Formatter.E6;
+            this.ActiveDoublesTextBox.NumStyles = ((System.Globalization.NumberStyles)(((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowTrailingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
             this.ActiveDoublesTextBox.Size = new System.Drawing.Size(100, 20);
+            this.ActiveDoublesTextBox.Steps = -1D;
             this.ActiveDoublesTextBox.TabIndex = 4;
-
+            this.ActiveDoublesTextBox.ToValidate = NewUI.NumericTextBox.ValidateType.Double;
+            this.ActiveDoublesTextBox.Value = 0D;
             // 
             // ActiveDoublesErrorTextBox
             // 
             this.ActiveDoublesErrorTextBox.Location = new System.Drawing.Point(362, 49);
+            this.ActiveDoublesErrorTextBox.Max = 1.7976931348623157E+308D;
+            this.ActiveDoublesErrorTextBox.Min = 0D;
             this.ActiveDoublesErrorTextBox.Name = "ActiveDoublesErrorTextBox";
+            this.ActiveDoublesErrorTextBox.NumberFormat = NewUI.NumericTextBox.Formatter.E6;
+            this.ActiveDoublesErrorTextBox.NumStyles = ((System.Globalization.NumberStyles)(((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowTrailingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
             this.ActiveDoublesErrorTextBox.Size = new System.Drawing.Size(100, 20);
+            this.ActiveDoublesErrorTextBox.Steps = -1D;
             this.ActiveDoublesErrorTextBox.TabIndex = 3;
-
+            this.ActiveDoublesErrorTextBox.ToValidate = NewUI.NumericTextBox.ValidateType.Double;
+            this.ActiveDoublesErrorTextBox.Value = 0D;
             // 
             // ActiveSinglesErrorTextBox
             // 
             this.ActiveSinglesErrorTextBox.Location = new System.Drawing.Point(362, 23);
+            this.ActiveSinglesErrorTextBox.Max = 1.7976931348623157E+308D;
+            this.ActiveSinglesErrorTextBox.Min = 0D;
             this.ActiveSinglesErrorTextBox.Name = "ActiveSinglesErrorTextBox";
+            this.ActiveSinglesErrorTextBox.NumberFormat = NewUI.NumericTextBox.Formatter.E6;
+            this.ActiveSinglesErrorTextBox.NumStyles = ((System.Globalization.NumberStyles)(((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowTrailingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
             this.ActiveSinglesErrorTextBox.Size = new System.Drawing.Size(100, 20);
+            this.ActiveSinglesErrorTextBox.Steps = -1D;
             this.ActiveSinglesErrorTextBox.TabIndex = 2;
-
+            this.ActiveSinglesErrorTextBox.ToValidate = NewUI.NumericTextBox.ValidateType.Double;
+            this.ActiveSinglesErrorTextBox.Value = 0D;
             // 
             // ActiveSinglesTextBox
             // 
             this.ActiveSinglesTextBox.Location = new System.Drawing.Point(125, 23);
+            this.ActiveSinglesTextBox.Max = 1.7976931348623157E+308D;
+            this.ActiveSinglesTextBox.Min = 0D;
             this.ActiveSinglesTextBox.Name = "ActiveSinglesTextBox";
+            this.ActiveSinglesTextBox.NumberFormat = NewUI.NumericTextBox.Formatter.E6;
+            this.ActiveSinglesTextBox.NumStyles = ((System.Globalization.NumberStyles)(((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowTrailingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
             this.ActiveSinglesTextBox.Size = new System.Drawing.Size(100, 20);
+            this.ActiveSinglesTextBox.Steps = -1D;
             this.ActiveSinglesTextBox.TabIndex = 0;
+            this.ActiveSinglesTextBox.ToValidate = NewUI.NumericTextBox.ValidateType.Double;
+            this.ActiveSinglesTextBox.Value = 0D;
             // 
             // ModeLabel
             // 

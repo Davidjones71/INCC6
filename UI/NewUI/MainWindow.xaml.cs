@@ -207,7 +207,7 @@ namespace NewUI
         private void MaintainCollarClick(object sender, RoutedEventArgs e)
         {
             //HN -- Cross ref shown first, next button takes you to IDDCollarCal
-            IDDCollarCrossRef f = new IDDCollarCrossRef();
+            IDDCollarCrossRef f = new IDDCollarCrossRef(Integ.GetCurrentAcquireParams().collar_mode,false);
             f.StartPosition = FormStartPosition.CenterScreen;
 
             f.ShowDialog();
@@ -395,10 +395,8 @@ namespace NewUI
             INCCAnalysisParams.collar_combined_rec parms = new INCCAnalysisParams.collar_combined_rec();
 
             Integ.GetCurrentAcquireDetectorPair(ref ap, ref det);
-            if (Integ.GetMethodSelections(det.Id.DetectorId, ap.ItemId.material).Has(AnalysisMethod.CollarAmLi) ||
-                Integ.GetMethodSelections(det.Id.DetectorId, ap.ItemId.material).Has(AnalysisMethod.CollarCf))
+            if (Integ.GetMethodSelections(det.Id.DetectorId, ap.ItemId.material).Has(AnalysisMethod.Collar))
             {
-                bool isAmLi = Integ.GetMethodSelections(Integ.GetCurrentAcquireParams()).Has(AnalysisMethod.CollarAmLi);
                 IDDAcquireAssay f = new IDDAcquireAssay();
                 DialogResult result = f.ShowDialog();
                 f.Close();
@@ -908,14 +906,21 @@ namespace NewUI
 
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                using (ZipArchive archive = new ZipArchive(openFileDialog1.OpenFile()))
+                try
                 {
-                    // TODO: What does restore mean? Right now, just extracts to temp. 
-                    // would have to do some somersaults to switch DB and change app context to stored config.
-                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    using (ZipArchive archive = new ZipArchive(openFileDialog1.OpenFile()))
                     {
-                        entry.ExtractToFile(Path.Combine(Path.GetTempPath(), entry.FullName),true);
+                        // TODO: What does restore mean? Right now, just extracts to temp. 
+                        // would have to do some somersaults to switch DB and change app context to stored config.
+                        foreach (ZipArchiveEntry entry in archive.Entries)
+                        {
+                            entry.ExtractToFile(Path.Combine(Path.GetTempPath(), entry.FullName), true);
+                        }
                     }
+                }
+                catch
+                {
+                    System.Windows.Forms.MessageBox.Show("Cannot access zip file.", "ERROR");
                 }
             }
         }

@@ -46,9 +46,7 @@ namespace NewUI
         public IDDK5CollarItemData(bool suppressBackButton = false)
         {
             InitializeComponent();
-            //Acount for both collarsHN 5/3/2017
-            //Now needs AmLi or Cf.....
-            mp = new MethodParamFormFields(AnalysisMethod.CollarAmLi);
+            mp = new MethodParamFormFields(AnalysisMethod.Collar);
             Integ.GetCurrentAcquireDetectorPair(ref mp.acq, ref mp.det);
             INCCAnalysisParams.collar_combined_rec inDB;
 
@@ -174,7 +172,7 @@ namespace NewUI
 
         private void SaveParamsToDb ()
         {
-            mp = new MethodParamFormFields(AnalysisMethod.CollarAmLi);
+            mp = new MethodParamFormFields(AnalysisMethod.Collar);
             Integ.GetCurrentAcquireDetectorPair(ref mp.acq, ref mp.det);
             INCCAnalysisParams.collar_combined_rec inDB;
 

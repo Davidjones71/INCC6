@@ -3611,7 +3611,7 @@ namespace AnalysisDefs
             ap.campaign_id = dr["campaign_id"].ToString();
             ap.item_id = dr["item_id"].ToString(); // same id in results_rec and acquire_parms_rec after all
             ap.stratum_id = new Descriptor(dr["stratum_id"].ToString(), dr["stratum_id_description"].ToString());
-            ap.collar_mode = DB.Utils.DBBool(dr["collar_mode"].ToString());
+            ap.collar_mode = DB.Utils.DBInt32(dr["collar_mode"].ToString());
             ap.inventory_change_code = dr["inventory_change_code"].ToString();
             ap.io_code = dr["io_code"].ToString();
             ap.well_config = (WellConfiguration)(DB.Utils.DBInt32(dr["well_config"].ToString()));

@@ -213,10 +213,7 @@ namespace AnalysisDefs
                 case AnalysisMethod.CuriumRatio:
                     res = typeof(INCCMethodResults.results_curium_ratio_rec);
                     break;
-                case AnalysisMethod.CollarAmLi:
-                    res = typeof(INCCMethodResults.results_collar_rec);
-                    break;
-                case AnalysisMethod.CollarCf:
+                case AnalysisMethod.Collar:
                     res = typeof(INCCMethodResults.results_collar_rec);
                     break;
                 case AnalysisMethod.Active:
@@ -1953,6 +1950,7 @@ namespace AnalysisDefs
 
         public class results_collar_rec : INCCMethodResult
         {
+            //TODO: this needs to incorporate all the results
             public Tuple k0,k1,k2,k3,k4,k5;
             public Tuple u235_mass;
             public double percent_u235;

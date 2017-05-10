@@ -276,6 +276,7 @@ namespace DB
     }
 
     // This will get all the pieces of the collar_combined_rec HN 5/3/2017
+
     public class collar_combined_rec
     {
         public collar_combined_rec()

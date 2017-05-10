@@ -100,7 +100,10 @@ namespace NewUI
 					{
 						CycleList cl = NC.App.DB.GetCycles(det, m.MeasurementId, m.AcquireState.data_src); // APluralityOfMultiplicityAnalyzers: // URGENT: get all the cycles associated with each analyzer, restoring into the correct key->result pair
                         m.Add(cl);
-                        m.INCCAnalysisResults.TradResultsRec = NC.App.DB.ResultsRecFor(m.MeasurementId); 
+                        if (m.MeasOption == AssaySelector.MeasurementOption.rates)
+                            return;
+                        else
+                            m.INCCAnalysisResults.TradResultsRec = NC.App.DB.ResultsRecFor(m.MeasurementId); 
 					}
 					List<INCCTransferFile> itdl = INCCKnew.XFerFromMeasurements(mlist);
 					foreach (INCCTransferFile itd in itdl)

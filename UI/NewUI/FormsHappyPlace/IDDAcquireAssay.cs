@@ -159,7 +159,7 @@ namespace NewUI
                 {
                     IsotopicsBtn.Enabled = false; CompositeIsotopicsBtn.Enabled = false;
                 }
-                if (am.Has(AnalysisMethod.ActivePassive) || am.Has(AnalysisMethod.CollarAmLi))
+                if (am.Has(AnalysisMethod.ActivePassive) || am.Has(AnalysisMethod.Collar))
                     NumActiveCyclesLabel.Visible = NumActiveCyclesTextBox.Visible = true;
                 else
                     NumActiveCyclesLabel.Visible = NumActiveCyclesTextBox.Visible = false;
@@ -282,8 +282,7 @@ namespace NewUI
 
 		private void OKBtn_Click(object sender, EventArgs e)
 		{
-            bool isCollar = Integ.GetMethodSelections(Integ.GetCurrentAcquireParams()).Has(AnalysisMethod.CollarAmLi) ||
-                Integ.GetMethodSelections(Integ.GetCurrentAcquireParams()).Has(AnalysisMethod.CollarCf);
+            bool isCollar = Integ.GetMethodSelections(Integ.GetCurrentAcquireParams()).Has(AnalysisMethod.Collar);
             if (string.IsNullOrEmpty(ItemIdComboBox.Text))
             {
                 MessageBox.Show("You must enter an item id for this assay.", "ERROR");

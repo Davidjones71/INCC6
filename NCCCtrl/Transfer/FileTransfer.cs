@@ -1112,13 +1112,16 @@ namespace NCCTransfer
 
 			try
 			{
-				if (path.EndsWith("RTS"))
+                results_rec temp = new results_rec ();
+                temp = results_rec_list[0];
+				if (this.Path.EndsWith ("RTS"))
                 {
                     //No info in results for rates only. Do something. HN 5/10/2017
-                    //results_rec_list[0].
+                    temp.db_version = 6.0;
+                    WriteResultsRec(temp, bw);
                 }
-                
-                WriteResultsRec(results_rec_list[0], bw);
+                else
+                    WriteResultsRec(results_rec_list[0], bw);
 				WriteResultsStatus(results_status_list[0], bw);
                 foreach (iresultsbase irb in method_results_list)
                 {
@@ -1340,12 +1343,13 @@ namespace NCCTransfer
                 return result;
             }
 
-
+            /*bool oldrec = false;
             double db_version = 5.0;
-            if (results.db_version != db_version && !rates)
+            if (results.db_version != db_version)
             {
                 old_results_rec old_results = new old_results_rec();
                 sz = Marshal.SizeOf(old_results);
+                //sz = 5628;
                 stream.Seek(0, SeekOrigin.Begin);
                 los_bytos = TransferUtils.TryReadBytes(reader, sz);
                 if (los_bytos != null)
@@ -1357,9 +1361,8 @@ namespace NCCTransfer
                 {
                 }
                 // devnote: consider implementing this if old data still is of interest: convert_results (old_results, &results);
-                mlogger.TraceEvent(LogLevels.Warning, 33094, "Cannot use file {0}, not a version 5 result", source_path_filename);
-                return result;
-            }
+                oldrec = true;
+            }*/ //Old here means really old......
             try
             {
 
@@ -1379,7 +1382,10 @@ namespace NCCTransfer
 
 
                 ///* get word defining which results are valid for this data set */
-                results_status = (INCC.SaveResultsMask)TransferUtils.ReadInt16(reader, "saved results");
+                if (!rates)
+                    results_status = (INCC.SaveResultsMask)TransferUtils.ReadInt16(reader, "saved results");
+                else
+                    results_status = 0;
 
                 ///* add facility if necessary */
                 string s = TransferUtils.str(results.results_facility, INCC.FACILITY_LENGTH);
@@ -1707,20 +1713,31 @@ namespace NCCTransfer
                     number_runs = TransferUtils.ReadUInt16(reader, "number of runs");
                     mlogger.TraceEvent(LogLevels.Verbose, 33097, "Converting {0} INCC runs into cycles", number_runs);
                     run_rec run = new run_rec();
+                    run_rec_ext run2 = new run_rec_ext();
                     for (n = 0; n < number_runs; n++)
                     {
-                        sz = Marshal.SizeOf(run);
+                        //Old vs new run record
+                        if (results.db_version < 6.0)
+                            sz = Marshal.SizeOf(run);
+                        else
+                            sz = Marshal.SizeOf(run2);
                         los_bytos = TransferUtils.TryReadBytes(reader, sz);
                         if (los_bytos != null && los_bytos.Length >= sz)  // gonna fail here if size is not exact
                             fixed (byte* pData = los_bytos)
                             {
-                                run = *(run_rec*)pData;
+                                if (results.db_version < 6.0)
+                                    run = *(run_rec*)pData;
+                                else
+                                    run2 = *(run_rec_ext*)pData;
                             }
                         else
                         {
                             throw new TransferUtils.TransferParsingException("run_rec " + (n + 1).ToString() + " read failed");
                         }
-                        run_rec_list.Add(run);
+                        if (results.db_version < 6.0)
+                            run_rec_list.Add(run);
+                        else
+                            run_rec_list2.Add(run2);
                     }
                 }
 
@@ -1869,6 +1886,7 @@ namespace NCCTransfer
 
         // los cycles de xfer
         public List<run_rec> run_rec_list = new List<run_rec>();
+        public List<run_rec_ext> run_rec_list2 = new List<run_rec_ext>();
 
         // for add-a-src
         public List<run_rec>[] CFrun_rec_list;
